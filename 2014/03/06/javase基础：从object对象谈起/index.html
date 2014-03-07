@@ -1,0 +1,283 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>javase基础：从object对象谈起 | Lazyboy&#39;s blog</title>
+  <meta name="author" content="lazyboy">
+  
+  <meta name="description" content="Walk steps step by step">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="javase基础：从object对象谈起"/>
+  <meta property="og:site_name" content="Lazyboy&#39;s blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Lazyboy&#39;s blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Lazyboy&#39;s blog</a></h1>
+  <h2><a href="/">Walk steps step by step</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+      <li><a href="/todo">ToDo</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-03-06T06:55:01.000Z"><a href="/2014/03/06/javase基础：从object对象谈起/">3月 6 2014</a></time>
+      
+      
+  
+    <h1 class="title">javase基础：从object对象谈起</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p><img src="/img/javazhifu.jpg" alt=""></p>
+<h1 id="-">概述</h1>
+<p>相信了解java的coder都应该知道object对象，object类是java中所有类的祖先，即使数组也实现了该类的方法，<a href="http://docs.oracle.com/javase/7/docs/api/" target="_blank">查询官方的api</a>可以看到object中包含equals、hashcode、clone、finalize、toString以及其他一些与线程操作相关的方法。设计object类的主要目的是为了扩展，上述的非final类型的方法，都有明确的规约，我们自己设计的类在覆盖object的方法时也必然要遵循这些规约，如果不能遵守这些约定的话，其他依赖于该类的类，像是java中类似于HashMap和Hashtable等的集合类，就无法与该类一起工作，后续内容会有相应例子给出解释。</p>
+<p><a id="more"></a></p>
+<ul>
+<li>equals方法
+故名思义，equals方法设计的目的是为了比较两个对象是否相同，以下代码为Jdk7中给出的实现方式，即比较两个对象是否持有相同的引用，即是否是指向的同一个对象。若两个对象的引用相同，则这两个对象显然是相同的，Object类以此方式作为判断两个对象是否等同也是合乎情理的。<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre></td><td class="code"><pre>     <span class="javadoc">/**
+     * Indicates whether some other object is "equal to" this one.
+     *<span class="javadoctag"> @param</span>   obj   the reference object with which to compare.
+     *<span class="javadoctag"> @return</span>  {@code true} if this object is the same as the obj
+     *          argument; {@code false} otherwise.
+     *<span class="javadoctag"> @see</span>     #hashCode()
+     *<span class="javadoctag"> @see</span>     java.util.HashMap
+     */</span>
+    <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span>(Object obj) {
+        <span class="keyword">return</span> (<span class="keyword">this</span> == obj);
+    }
+</pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>然而，在实际的开发过程中，我们在利用equals方法比较值对象的引用时，只是希望知道它们在逻辑上是否相等，而不想了解它们是否指向了同一个对象，比如Integer类，如下代码我们分别创建了IntegerA和IntegerB两个对象，很显然此时两个对象的引用是不相同的。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+</pre></td><td class="code"><pre>    <span class="built_in">Integer</span> integerA=<span class="keyword">new</span> <span class="built_in">Integer</span>(<span class="number">3</span>);
+    <span class="built_in">Integer</span> integerB=<span class="keyword">new</span> <span class="built_in">Integer</span>(<span class="number">3</span>);
+</pre></td></tr></table></figure>
+
+<p>但我们通常更关心的是Interger.inValue（）的值是否相同，此时两个对象的Interger.inValue（）的值都是3，即我们此时就会认为这两个对象是相等的（Integer可能有更复杂判别相等的方式，在此只是为了举例，特做简化而已）。</p>
+<p>因此我们不难想到，当类中需要有特有的“逻辑相等”的判别方式时，并且超类没有实现我们所希望的行为时，我们就需要去覆盖父类Object中的equlas方法，那么，<strong>接下来的问题应该是当如何为我们的类设计合适的equals方法了。</strong>
+前面提及过，object类给它每个非final类的方法都制定了规约，以下约定的内容来自
+object规范[翻译自JavaSE7 object源码注释]:</p>
+<ul>
+<li>自反性，即对任何非null引用，x.equals(x),必须返回true</li>
+<li>对称性，即对任何非null的引用值x和y，当且仅当y.equals(x)为真时，对应的x.equals(y)也应该为真。</li>
+<li>传递性，即对任何非null的引用值x、y和z，如果y.equals(x)为真，x.equals(z)为真，那么对应的x.equals(z)也应该为真。</li>
+<li>一致性，即对任何非null的引用值x和y，只要我们没修改x或者y与比较操作相关的信息，那么多次调用equals操作，其返回的结果应该是始终如一的。</li>
+<li>最后是对于任意的非null的引用值x，x.equals(null)应该为假。</li>
+</ul>
+<p>上述的规约在数学上看来都很直观，也十分合乎情理，可是在代码层级去维护这些规约，却并不那么简单，前辈们在自己的开发实践中给出了equlas方法的最佳实践方式，如下</p>
+<ol>
+<li>显示参数命名为otherObject，稍后将它转化为另一个叫做other的变量</li>
+<li>采用object的默认方式，比较this与otherObject对象的引用是否相同，该项操作只是为了操作上的一种优化，如果两者的引用相同我们就不用再费力去比较两个对象各自的属性是否相同了。</li>
+<li>检测otherObject对象是否为null，如果为null，则返回false，该项检测可以避免NPException（空指针异常）</li>
+<li>使用instanceof关键字检查参数是否为正确的类型，即是否该euqals方法所在的类的类型，可能有些读者对java中的instanceof关键字实现机制不是很熟悉，可参考<a href="http://www.zhihu.com/question/21574535" target="_blank">知乎</a>上关于该关键词的讨论，在此不再赘述。</li>
+<li>此时再将otherObject转换为相应的类类型变量（进行强制类型转换）</li>
+<li>然后再比较各自特有的属性是否相同，使用==比较基本类型域，递归使用equals方法比较对象域，如果都匹配，则返回true，否则返回false。另外此时还要注意域的比较顺序，不同顺序将导致equals方法的执行效率不同。
+在此列出覆写equlas方法时经常出现的一类错误，且该错误往往较难察觉，如下代码：<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="code"><pre><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span>{</span>
+   <span class="keyword">private</span>   String name;
+   <span class="keyword">private</span>   <span class="keyword">int</span> age;
+
+ <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span>(Student otherObject){
+    <span class="keyword">if</span>(<span class="keyword">this</span>==otherObject) 
+        <span class="keyword">return</span> <span class="keyword">true</span>;
+    <span class="keyword">if</span>(otherObject==<span class="keyword">null</span>)   
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+    <span class="keyword">if</span>(!otherObject.<span class="keyword">instanceof</span>(Student))
+        <span class="keyword">return</span> <span class="keyword">false</span>;
+  Student other=(Student) otherObject;
+  <span class="keyword">return</span> <span class="keyword">this</span>.name.equals(other.name)&&<span class="keyword">this</span>.age==other.age;
+}
+}
+</pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>此时，我们将equals方法中的Object型参数替换为自定义类Student类型，该方法并没有覆盖Object中的equals方法，在程序运行中可能会出现未知的结果。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/blog/">blog</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/object对象/">object对象</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+    <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone">QQ空间</a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina">新浪微博</a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq">腾讯微博</a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren">人人网</a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin">微信</a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+  </div>
+</article>
+
+
+<section id="comment">
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yanhoulei"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:zipperary.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/blog/">blog</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/object对象/" style="font-size: NaNpx;">object对象</a>
+  </div>
+</div>
+
+
+  
+
+  <div class="widget tag">
+<h3 class="title">友情链接</h3>
+<ul class="entry">
+<li><a href="http://zipperary.com/" title="Zippera's Blog">Zippera</a></li>
+</ul>
+</div>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 lazyboy
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
