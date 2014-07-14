@@ -40,8 +40,6 @@
     
       <li><a href="/about">关于</a></li>
     
-      <li><a href="/todo">ToDo</a></li>
-    
        <li><a href="/atom.xml">RSS</a></li>
   </ul>
   <div class="clearfix"></div>
@@ -65,12 +63,11 @@
     <div class="entry">
       
         <p><img src="/img/javazhifu.jpg" alt=""></p>
-<h1 id="-">概述</h1>
-<p>相信了解java的coder都应该知道object对象，object类是java中所有类的祖先，即使数组也实现了该类的方法，<a href="http://docs.oracle.com/javase/7/docs/api/" target="_blank">查询官方的api</a>可以看到object中包含equals、hashcode、clone、finalize、toString以及其他一些与线程操作相关的方法。设计object类的主要目的是为了扩展，上述的非final类型的方法，都有明确的规约，我们自己设计的类在覆盖object的方法时也必然要遵循这些规约，如果不能遵守这些约定的话，其他依赖于该类的类，像是java中类似于HashMap和Hashtable等的集合类，就无法与该类一起工作，后续内容会有相应例子给出解释。</p>
+<h1 id="&#x6982;&#x8FF0;">&#x6982;&#x8FF0;</h1>
+<p>&#x76F8;&#x4FE1;&#x4E86;&#x89E3;java&#x7684;coder&#x90FD;&#x5E94;&#x8BE5;&#x77E5;&#x9053;object&#x5BF9;&#x8C61;&#xFF0C;object&#x7C7B;&#x662F;java&#x4E2D;&#x6240;&#x6709;&#x7C7B;&#x7684;&#x7956;&#x5148;&#xFF0C;&#x5373;&#x4F7F;&#x6570;&#x7EC4;&#x4E5F;&#x5B9E;&#x73B0;&#x4E86;&#x8BE5;&#x7C7B;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;<a href="http://docs.oracle.com/javase/7/docs/api/" target="_blank" rel="external">&#x67E5;&#x8BE2;&#x5B98;&#x65B9;&#x7684;api</a>&#x53EF;&#x4EE5;&#x770B;&#x5230;object&#x4E2D;&#x5305;&#x542B;equals&#x3001;hashcode&#x3001;clone&#x3001;finalize&#x3001;toString&#x4EE5;&#x53CA;&#x5176;&#x4ED6;&#x4E00;&#x4E9B;&#x4E0E;&#x7EBF;&#x7A0B;&#x64CD;&#x4F5C;&#x76F8;&#x5173;&#x7684;&#x65B9;&#x6CD5;&#x3002;&#x8BBE;&#x8BA1;object&#x7C7B;&#x7684;&#x4E3B;&#x8981;&#x76EE;&#x7684;&#x662F;&#x4E3A;&#x4E86;&#x6269;&#x5C55;&#xFF0C;&#x4E0A;&#x8FF0;&#x7684;&#x975E;final&#x7C7B;&#x578B;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x90FD;&#x6709;&#x660E;&#x786E;&#x7684;&#x89C4;&#x7EA6;&#xFF0C;&#x6211;&#x4EEC;&#x81EA;&#x5DF1;&#x8BBE;&#x8BA1;&#x7684;&#x7C7B;&#x5728;&#x8986;&#x76D6;object&#x7684;&#x65B9;&#x6CD5;&#x65F6;&#x4E5F;&#x5FC5;&#x7136;&#x8981;&#x9075;&#x5FAA;&#x8FD9;&#x4E9B;&#x89C4;&#x7EA6;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x80FD;&#x9075;&#x5B88;&#x8FD9;&#x4E9B;&#x7EA6;&#x5B9A;&#x7684;&#x8BDD;&#xFF0C;&#x5176;&#x4ED6;&#x4F9D;&#x8D56;&#x4E8E;&#x8BE5;&#x7C7B;&#x7684;&#x7C7B;&#xFF0C;&#x50CF;&#x662F;java&#x4E2D;&#x7C7B;&#x4F3C;&#x4E8E;HashMap&#x548C;Hashtable&#x7B49;&#x7684;&#x96C6;&#x5408;&#x7C7B;&#xFF0C;&#x5C31;&#x65E0;&#x6CD5;&#x4E0E;&#x8BE5;&#x7C7B;&#x4E00;&#x8D77;&#x5DE5;&#x4F5C;&#xFF0C;&#x540E;&#x7EED;&#x5185;&#x5BB9;&#x4F1A;&#x6709;&#x76F8;&#x5E94;&#x4F8B;&#x5B50;&#x7ED9;&#x51FA;&#x89E3;&#x91CA;&#x3002;</p>
 <p><a id="more"></a></p>
 <ul>
-<li>equals方法
-故名思义，equals方法设计的目的是为了比较两个对象是否相同，以下代码为Jdk7中给出的实现方式，即比较两个对象是否持有相同的引用，即是否是指向的同一个对象。若两个对象的引用相同，则这两个对象显然是相同的，Object类以此方式作为判断两个对象是否等同也是合乎情理的。<figure class="highlight"><table><tr><td class="gutter"><pre>1
+<li>equals&#x65B9;&#x6CD5;<br>&#x6545;&#x540D;&#x601D;&#x4E49;&#xFF0C;equals&#x65B9;&#x6CD5;&#x8BBE;&#x8BA1;&#x7684;&#x76EE;&#x7684;&#x662F;&#x4E3A;&#x4E86;&#x6BD4;&#x8F83;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x76F8;&#x540C;&#xFF0C;&#x4EE5;&#x4E0B;&#x4EE3;&#x7801;&#x4E3A;Jdk7&#x4E2D;&#x7ED9;&#x51FA;&#x7684;&#x5B9E;&#x73B0;&#x65B9;&#x5F0F;&#xFF0C;&#x5373;&#x6BD4;&#x8F83;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x6301;&#x6709;&#x76F8;&#x540C;&#x7684;&#x5F15;&#x7528;&#xFF0C;&#x5373;&#x662F;&#x5426;&#x662F;&#x6307;&#x5411;&#x7684;&#x540C;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#x3002;&#x82E5;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x76F8;&#x540C;&#xFF0C;&#x5219;&#x8FD9;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x663E;&#x7136;&#x662F;&#x76F8;&#x540C;&#x7684;&#xFF0C;Object&#x7C7B;&#x4EE5;&#x6B64;&#x65B9;&#x5F0F;&#x4F5C;&#x4E3A;&#x5224;&#x65AD;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x7B49;&#x540C;&#x4E5F;&#x662F;&#x5408;&#x4E4E;&#x60C5;&#x7406;&#x7684;&#x3002;<br><figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -81,48 +78,39 @@
 9
 10
 11
-</pre></td><td class="code"><pre>     <span class="javadoc">/**
-     * Indicates whether some other object is "equal to" this one.
-     *<span class="javadoctag"> @param</span>   obj   the reference object with which to compare.
-     *<span class="javadoctag"> @return</span>  {@code true} if this object is the same as the obj
-     *          argument; {@code false} otherwise.
-     *<span class="javadoctag"> @see</span>     #hashCode()
-     *<span class="javadoctag"> @see</span>     java.util.HashMap
-     */</span>
-    <span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span>(Object obj) {
-        <span class="keyword">return</span> (<span class="keyword">this</span> == obj);
-    }
-</pre></td></tr></table></figure>
+</pre></td><td class="code"><pre>/**
+* Indicates whether <span class="keyword">some</span> other object <span class="keyword">is</span> <span class="string">&quot;equal to&quot;</span> this one.
+* @param   obj   <span class="keyword">the</span> <span class="keyword">reference</span> object <span class="keyword">with</span> which <span class="keyword">to</span> compare.
+* @<span class="constant">return</span>  {@code <span class="constant">true</span>} <span class="keyword">if</span> this object <span class="keyword">is</span> <span class="keyword">the</span> same <span class="keyword">as</span> <span class="keyword">the</span> obj
+*          argument; {@code <span class="constant">false</span>} otherwise.
+* @see     <span class="comment">#hashCode()</span>
+* @see     java.util.HashMap
+*/
+ublic <span class="type">boolean</span> <span class="keyword">equals</span>(Object obj) {
+<span class="command">   return</span> (this == obj);
 
-</li>
-</ul>
-<p>然而，在实际的开发过程中，我们在利用equals方法比较值对象的引用时，只是希望知道它们在逻辑上是否相等，而不想了解它们是否指向了同一个对象，比如Integer类，如下代码我们分别创建了IntegerA和IntegerB两个对象，很显然此时两个对象的引用是不相同的。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre>1
+</pre></td></tr></table></figure><br>&#x7136;&#x800C;&#xFF0C;&#x5728;&#x5B9E;&#x9645;&#x7684;&#x5F00;&#x53D1;&#x8FC7;&#x7A0B;&#x4E2D;&#xFF0C;&#x6211;&#x4EEC;&#x5728;&#x5229;&#x7528;equals&#x65B9;&#x6CD5;&#x6BD4;&#x8F83;&#x503C;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x65F6;&#xFF0C;&#x53EA;&#x662F;&#x5E0C;&#x671B;&#x77E5;&#x9053;&#x5B83;&#x4EEC;&#x5728;&#x903B;&#x8F91;&#x4E0A;&#x662F;&#x5426;&#x76F8;&#x7B49;&#xFF0C;&#x800C;&#x4E0D;&#x60F3;&#x4E86;&#x89E3;&#x5B83;&#x4EEC;&#x662F;&#x5426;&#x6307;&#x5411;&#x4E86;&#x540C;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x6BD4;&#x5982;Integer&#x7C7B;&#xFF0C;&#x5982;&#x4E0B;&#x4EE3;&#x7801;&#x6211;&#x4EEC;&#x5206;&#x522B;&#x521B;&#x5EFA;&#x4E86;IntegerA&#x548C;IntegerB&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x5F88;&#x663E;&#x7136;&#x6B64;&#x65F6;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x662F;&#x4E0D;&#x76F8;&#x540C;&#x7684;&#x3002;<br><figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
-</pre></td><td class="code"><pre>    <span class="built_in">Integer</span> integerA=<span class="keyword">new</span> <span class="built_in">Integer</span>(<span class="number">3</span>);
-    <span class="built_in">Integer</span> integerB=<span class="keyword">new</span> <span class="built_in">Integer</span>(<span class="number">3</span>);
-</pre></td></tr></table></figure>
-
-<p>但我们通常更关心的是Interger.inValue（）的值是否相同，此时两个对象的Interger.inValue（）的值都是3，即我们此时就会认为这两个对象是相等的（Integer可能有更复杂判别相等的方式，在此只是为了举例，特做简化而已）。</p>
-<p>因此我们不难想到，当类中需要有特有的“逻辑相等”的判别方式时，并且超类没有实现我们所希望的行为时，我们就需要去覆盖父类Object中的equlas方法，那么，<strong>接下来的问题应该是当如何为我们的类设计合适的equals方法了。</strong>
-前面提及过，object类给它每个非final类的方法都制定了规约，以下约定的内容来自
-object规范[翻译自JavaSE7 object源码注释]:</p>
-<ul>
-<li>自反性，即对任何非null引用，x.equals(x),必须返回true</li>
-<li>对称性，即对任何非null的引用值x和y，当且仅当y.equals(x)为真时，对应的x.equals(y)也应该为真。</li>
-<li>传递性，即对任何非null的引用值x、y和z，如果y.equals(x)为真，x.equals(z)为真，那么对应的x.equals(z)也应该为真。</li>
-<li>一致性，即对任何非null的引用值x和y，只要我们没修改x或者y与比较操作相关的信息，那么多次调用equals操作，其返回的结果应该是始终如一的。</li>
-<li>最后是对于任意的非null的引用值x，x.equals(null)应该为假。</li>
+</pre></td><td class="code"><pre><span class="built_in">Integer</span> integerA=<span class="keyword">new</span> <span class="built_in">Integer</span>(<span class="number">3</span>);
+<span class="built_in">Integer</span> integerB=<span class="keyword">new</span> <span class="built_in">Integer</span>(<span class="number">3</span>);
+</pre></td></tr></table></figure><br>&#x4F46;&#x6211;&#x4EEC;&#x901A;&#x5E38;&#x66F4;&#x5173;&#x5FC3;&#x7684;&#x662F;Interger.inValue&#xFF08;&#xFF09;&#x7684;&#x503C;&#x662F;&#x5426;&#x76F8;&#x540C;&#xFF0C;&#x6B64;&#x65F6;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x7684;Interger.inValue&#xFF08;&#xFF09;&#x7684;&#x503C;&#x90FD;&#x662F;3&#xFF0C;&#x5373;&#x6211;&#x4EEC;&#x6B64;&#x65F6;&#x5C31;&#x4F1A;&#x8BA4;&#x4E3A;&#x8FD9;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x662F;&#x76F8;&#x7B49;&#x7684;&#xFF08;Integer&#x53EF;&#x80FD;&#x6709;&#x66F4;&#x590D;&#x6742;&#x5224;&#x522B;&#x76F8;&#x7B49;&#x7684;&#x65B9;&#x5F0F;&#xFF0C;&#x5728;&#x6B64;&#x53EA;&#x662F;&#x4E3A;&#x4E86;&#x4E3E;&#x4F8B;&#xFF0C;&#x7279;&#x505A;&#x7B80;&#x5316;&#x800C;&#x5DF2;&#xFF09;&#x3002;</li>
 </ul>
-<p>上述的规约在数学上看来都很直观，也十分合乎情理，可是在代码层级去维护这些规约，却并不那么简单，前辈们在自己的开发实践中给出了equlas方法的最佳实践方式，如下</p>
+<p>&#x56E0;&#x6B64;&#x6211;&#x4EEC;&#x4E0D;&#x96BE;&#x60F3;&#x5230;&#xFF0C;&#x5F53;&#x7C7B;&#x4E2D;&#x9700;&#x8981;&#x6709;&#x7279;&#x6709;&#x7684;&#x201C;&#x903B;&#x8F91;&#x76F8;&#x7B49;&#x201D;&#x7684;&#x5224;&#x522B;&#x65B9;&#x5F0F;&#x65F6;&#xFF0C;&#x5E76;&#x4E14;&#x8D85;&#x7C7B;&#x6CA1;&#x6709;&#x5B9E;&#x73B0;&#x6211;&#x4EEC;&#x6240;&#x5E0C;&#x671B;&#x7684;&#x884C;&#x4E3A;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C31;&#x9700;&#x8981;&#x53BB;&#x8986;&#x76D6;&#x7236;&#x7C7B;Object&#x4E2D;&#x7684;equlas&#x65B9;&#x6CD5;&#xFF0C;&#x90A3;&#x4E48;&#xFF0C;<strong>&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x95EE;&#x9898;&#x5E94;&#x8BE5;&#x662F;&#x5F53;&#x5982;&#x4F55;&#x4E3A;&#x6211;&#x4EEC;&#x7684;&#x7C7B;&#x8BBE;&#x8BA1;&#x5408;&#x9002;&#x7684;equals&#x65B9;&#x6CD5;&#x4E86;&#x3002;</strong><br>&#x524D;&#x9762;&#x63D0;&#x53CA;&#x8FC7;&#xFF0C;object&#x7C7B;&#x7ED9;&#x5B83;&#x6BCF;&#x4E2A;&#x975E;final&#x7C7B;&#x7684;&#x65B9;&#x6CD5;&#x90FD;&#x5236;&#x5B9A;&#x4E86;&#x89C4;&#x7EA6;&#xFF0C;&#x4EE5;&#x4E0B;&#x7EA6;&#x5B9A;&#x7684;&#x5185;&#x5BB9;&#x6765;&#x81EA;<br>object&#x89C4;&#x8303;[&#x7FFB;&#x8BD1;&#x81EA;JavaSE7 object&#x6E90;&#x7801;&#x6CE8;&#x91CA;]:</p>
+<ul>
+<li>&#x81EA;&#x53CD;&#x6027;&#xFF0C;&#x5373;&#x5BF9;&#x4EFB;&#x4F55;&#x975E;null&#x5F15;&#x7528;&#xFF0C;x.equals(x),&#x5FC5;&#x987B;&#x8FD4;&#x56DE;true</li>
+<li>&#x5BF9;&#x79F0;&#x6027;&#xFF0C;&#x5373;&#x5BF9;&#x4EFB;&#x4F55;&#x975E;null&#x7684;&#x5F15;&#x7528;&#x503C;x&#x548C;y&#xFF0C;&#x5F53;&#x4E14;&#x4EC5;&#x5F53;y.equals(x)&#x4E3A;&#x771F;&#x65F6;&#xFF0C;&#x5BF9;&#x5E94;&#x7684;x.equals(y)&#x4E5F;&#x5E94;&#x8BE5;&#x4E3A;&#x771F;&#x3002;</li>
+<li>&#x4F20;&#x9012;&#x6027;&#xFF0C;&#x5373;&#x5BF9;&#x4EFB;&#x4F55;&#x975E;null&#x7684;&#x5F15;&#x7528;&#x503C;x&#x3001;y&#x548C;z&#xFF0C;&#x5982;&#x679C;y.equals(x)&#x4E3A;&#x771F;&#xFF0C;x.equals(z)&#x4E3A;&#x771F;&#xFF0C;&#x90A3;&#x4E48;&#x5BF9;&#x5E94;&#x7684;x.equals(z)&#x4E5F;&#x5E94;&#x8BE5;&#x4E3A;&#x771F;&#x3002;</li>
+<li>&#x4E00;&#x81F4;&#x6027;&#xFF0C;&#x5373;&#x5BF9;&#x4EFB;&#x4F55;&#x975E;null&#x7684;&#x5F15;&#x7528;&#x503C;x&#x548C;y&#xFF0C;&#x53EA;&#x8981;&#x6211;&#x4EEC;&#x6CA1;&#x4FEE;&#x6539;x&#x6216;&#x8005;y&#x4E0E;&#x6BD4;&#x8F83;&#x64CD;&#x4F5C;&#x76F8;&#x5173;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x90A3;&#x4E48;&#x591A;&#x6B21;&#x8C03;&#x7528;equals&#x64CD;&#x4F5C;&#xFF0C;&#x5176;&#x8FD4;&#x56DE;&#x7684;&#x7ED3;&#x679C;&#x5E94;&#x8BE5;&#x662F;&#x59CB;&#x7EC8;&#x5982;&#x4E00;&#x7684;&#x3002;</li>
+<li>&#x6700;&#x540E;&#x662F;&#x5BF9;&#x4E8E;&#x4EFB;&#x610F;&#x7684;&#x975E;null&#x7684;&#x5F15;&#x7528;&#x503C;x&#xFF0C;x.equals(null)&#x5E94;&#x8BE5;&#x4E3A;&#x5047;&#x3002;</li>
+</ul>
+<p>&#x4E0A;&#x8FF0;&#x7684;&#x89C4;&#x7EA6;&#x5728;&#x6570;&#x5B66;&#x4E0A;&#x770B;&#x6765;&#x90FD;&#x5F88;&#x76F4;&#x89C2;&#xFF0C;&#x4E5F;&#x5341;&#x5206;&#x5408;&#x4E4E;&#x60C5;&#x7406;&#xFF0C;&#x53EF;&#x662F;&#x5728;&#x4EE3;&#x7801;&#x5C42;&#x7EA7;&#x53BB;&#x7EF4;&#x62A4;&#x8FD9;&#x4E9B;&#x89C4;&#x7EA6;&#xFF0C;&#x5374;&#x5E76;&#x4E0D;&#x90A3;&#x4E48;&#x7B80;&#x5355;&#xFF0C;&#x524D;&#x8F88;&#x4EEC;&#x5728;&#x81EA;&#x5DF1;&#x7684;&#x5F00;&#x53D1;&#x5B9E;&#x8DF5;&#x4E2D;&#x7ED9;&#x51FA;&#x4E86;equlas&#x65B9;&#x6CD5;&#x7684;&#x6700;&#x4F73;&#x5B9E;&#x8DF5;&#x65B9;&#x5F0F;&#xFF0C;&#x5982;&#x4E0B;</p>
 <ol>
-<li>显示参数命名为otherObject，稍后将它转化为另一个叫做other的变量</li>
-<li>采用object的默认方式，比较this与otherObject对象的引用是否相同，该项操作只是为了操作上的一种优化，如果两者的引用相同我们就不用再费力去比较两个对象各自的属性是否相同了。</li>
-<li>检测otherObject对象是否为null，如果为null，则返回false，该项检测可以避免NPException（空指针异常）</li>
-<li>使用instanceof关键字检查参数是否为正确的类型，即是否该euqals方法所在的类的类型，可能有些读者对java中的instanceof关键字实现机制不是很熟悉，可参考<a href="http://www.zhihu.com/question/21574535" target="_blank">知乎</a>上关于该关键词的讨论，在此不再赘述。</li>
-<li>此时再将otherObject转换为相应的类类型变量（进行强制类型转换）</li>
-<li>然后再比较各自特有的属性是否相同，使用==比较基本类型域，递归使用equals方法比较对象域，如果都匹配，则返回true，否则返回false。另外此时还要注意域的比较顺序，不同顺序将导致equals方法的执行效率不同。
-在此列出覆写equlas方法时经常出现的一类错误，且该错误往往较难察觉，如下代码：<figure class="highlight"><table><tr><td class="gutter"><pre>1
+<li>&#x663E;&#x793A;&#x53C2;&#x6570;&#x547D;&#x540D;&#x4E3A;otherObject&#xFF0C;&#x7A0D;&#x540E;&#x5C06;&#x5B83;&#x8F6C;&#x5316;&#x4E3A;&#x53E6;&#x4E00;&#x4E2A;&#x53EB;&#x505A;other&#x7684;&#x53D8;&#x91CF;</li>
+<li>&#x91C7;&#x7528;object&#x7684;&#x9ED8;&#x8BA4;&#x65B9;&#x5F0F;&#xFF0C;&#x6BD4;&#x8F83;this&#x4E0E;otherObject&#x5BF9;&#x8C61;&#x7684;&#x5F15;&#x7528;&#x662F;&#x5426;&#x76F8;&#x540C;&#xFF0C;&#x8BE5;&#x9879;&#x64CD;&#x4F5C;&#x53EA;&#x662F;&#x4E3A;&#x4E86;&#x64CD;&#x4F5C;&#x4E0A;&#x7684;&#x4E00;&#x79CD;&#x4F18;&#x5316;&#xFF0C;&#x5982;&#x679C;&#x4E24;&#x8005;&#x7684;&#x5F15;&#x7528;&#x76F8;&#x540C;&#x6211;&#x4EEC;&#x5C31;&#x4E0D;&#x7528;&#x518D;&#x8D39;&#x529B;&#x53BB;&#x6BD4;&#x8F83;&#x4E24;&#x4E2A;&#x5BF9;&#x8C61;&#x5404;&#x81EA;&#x7684;&#x5C5E;&#x6027;&#x662F;&#x5426;&#x76F8;&#x540C;&#x4E86;&#x3002;</li>
+<li>&#x68C0;&#x6D4B;otherObject&#x5BF9;&#x8C61;&#x662F;&#x5426;&#x4E3A;null&#xFF0C;&#x5982;&#x679C;&#x4E3A;null&#xFF0C;&#x5219;&#x8FD4;&#x56DE;false&#xFF0C;&#x8BE5;&#x9879;&#x68C0;&#x6D4B;&#x53EF;&#x4EE5;&#x907F;&#x514D;NPException&#xFF08;&#x7A7A;&#x6307;&#x9488;&#x5F02;&#x5E38;&#xFF09;</li>
+<li>&#x4F7F;&#x7528;instanceof&#x5173;&#x952E;&#x5B57;&#x68C0;&#x67E5;&#x53C2;&#x6570;&#x662F;&#x5426;&#x4E3A;&#x6B63;&#x786E;&#x7684;&#x7C7B;&#x578B;&#xFF0C;&#x5373;&#x662F;&#x5426;&#x8BE5;euqals&#x65B9;&#x6CD5;&#x6240;&#x5728;&#x7684;&#x7C7B;&#x7684;&#x7C7B;&#x578B;&#xFF0C;&#x53EF;&#x80FD;&#x6709;&#x4E9B;&#x8BFB;&#x8005;&#x5BF9;java&#x4E2D;&#x7684;instanceof&#x5173;&#x952E;&#x5B57;&#x5B9E;&#x73B0;&#x673A;&#x5236;&#x4E0D;&#x662F;&#x5F88;&#x719F;&#x6089;&#xFF0C;&#x53EF;&#x53C2;&#x8003;<a href="http://www.zhihu.com/question/21574535" target="_blank" rel="external">&#x77E5;&#x4E4E;</a>&#x4E0A;&#x5173;&#x4E8E;&#x8BE5;&#x5173;&#x952E;&#x8BCD;&#x7684;&#x8BA8;&#x8BBA;&#xFF0C;&#x5728;&#x6B64;&#x4E0D;&#x518D;&#x8D58;&#x8FF0;&#x3002;</li>
+<li>&#x6B64;&#x65F6;&#x518D;&#x5C06;otherObject&#x8F6C;&#x6362;&#x4E3A;&#x76F8;&#x5E94;&#x7684;&#x7C7B;&#x7C7B;&#x578B;&#x53D8;&#x91CF;&#xFF08;&#x8FDB;&#x884C;&#x5F3A;&#x5236;&#x7C7B;&#x578B;&#x8F6C;&#x6362;&#xFF09;</li>
+<li>&#x7136;&#x540E;&#x518D;&#x6BD4;&#x8F83;&#x5404;&#x81EA;&#x7279;&#x6709;&#x7684;&#x5C5E;&#x6027;&#x662F;&#x5426;&#x76F8;&#x540C;&#xFF0C;&#x4F7F;&#x7528;==&#x6BD4;&#x8F83;&#x57FA;&#x672C;&#x7C7B;&#x578B;&#x57DF;&#xFF0C;&#x9012;&#x5F52;&#x4F7F;&#x7528;equals&#x65B9;&#x6CD5;&#x6BD4;&#x8F83;&#x5BF9;&#x8C61;&#x57DF;&#xFF0C;&#x5982;&#x679C;&#x90FD;&#x5339;&#x914D;&#xFF0C;&#x5219;&#x8FD4;&#x56DE;true&#xFF0C;&#x5426;&#x5219;&#x8FD4;&#x56DE;false&#x3002;&#x53E6;&#x5916;&#x6B64;&#x65F6;&#x8FD8;&#x8981;&#x6CE8;&#x610F;&#x57DF;&#x7684;&#x6BD4;&#x8F83;&#x987A;&#x5E8F;&#xFF0C;&#x4E0D;&#x540C;&#x987A;&#x5E8F;&#x5C06;&#x5BFC;&#x81F4;equals&#x65B9;&#x6CD5;&#x7684;&#x6267;&#x884C;&#x6548;&#x7387;&#x4E0D;&#x540C;&#x3002;<br>&#x5728;&#x6B64;&#x5217;&#x51FA;&#x8986;&#x5199;equlas&#x65B9;&#x6CD5;&#x65F6;&#x7ECF;&#x5E38;&#x51FA;&#x73B0;&#x7684;&#x4E00;&#x7C7B;&#x9519;&#x8BEF;&#xFF0C;&#x4E14;&#x8BE5;&#x9519;&#x8BEF;&#x5F80;&#x5F80;&#x8F83;&#x96BE;&#x5BDF;&#x89C9;&#xFF0C;&#x5982;&#x4E0B;&#x4EE3;&#x7801;&#xFF1A;<br><figure class="highlight"><table><tr><td class="gutter"><pre>1
 2
 3
 4
@@ -149,14 +137,11 @@ object规范[翻译自JavaSE7 object源码注释]:</p>
     <span class="keyword">if</span>(!otherObject.<span class="keyword">instanceof</span>(Student))
         <span class="keyword">return</span> <span class="keyword">false</span>;
   Student other=(Student) otherObject;
-  <span class="keyword">return</span> <span class="keyword">this</span>.name.equals(other.name)&&<span class="keyword">this</span>.age==other.age;
+  <span class="keyword">return</span> <span class="keyword">this</span>.name.equals(other.name)&amp;&amp;<span class="keyword">this</span>.age==other.age;
 }
 }
-</pre></td></tr></table></figure>
-
-</li>
+</pre></td></tr></table></figure><br>&#x6B64;&#x65F6;&#xFF0C;&#x6211;&#x4EEC;&#x5C06;equals&#x65B9;&#x6CD5;&#x4E2D;&#x7684;Object&#x578B;&#x53C2;&#x6570;&#x66FF;&#x6362;&#x4E3A;&#x81EA;&#x5B9A;&#x4E49;&#x7C7B;Student&#x7C7B;&#x578B;&#xFF0C;&#x8BE5;&#x65B9;&#x6CD5;&#x5E76;&#x6CA1;&#x6709;&#x8986;&#x76D6;Object&#x4E2D;&#x7684;equals&#x65B9;&#x6CD5;&#xFF0C;&#x5728;&#x7A0B;&#x5E8F;&#x8FD0;&#x884C;&#x4E2D;&#x53EF;&#x80FD;&#x4F1A;&#x51FA;&#x73B0;&#x672A;&#x77E5;&#x7684;&#x7ED3;&#x679C;&#x3002;</li>
 </ol>
-<p>此时，我们将equals方法中的Object型参数替换为自定义类Student类型，该方法并没有覆盖Object中的equals方法，在程序运行中可能会出现未知的结果。</p>
 
       
     </div>
@@ -256,8 +241,6 @@ var duoshuoQuery = {short_name:"yanhoulei"};
 <li><a href="http://xuxiaolong.net.cn/"> littlebean的Blog</a></li>
 </ul>
 </div>
-
-  <iframe id="sina_widget_3747808981" style="width:100%; height:500px;" frameborder="0" scrolling="no" src="http://v.t.sina.com.cn/widget/widget_blog.php?uid=3747808981&height=500&skin=wd_01&showpic=1"></iframe>
 </aside>
     <div class="clearfix"></div>
   </div>
