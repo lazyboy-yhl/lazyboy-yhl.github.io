@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>常用内部排序之合并排序 | Lazyboy&#39;s blog</title>
+  <meta name="author" content="yanHL">
+  
+  <meta name="description" content="学习过程记录">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="常用内部排序之合并排序"/>
+  <meta property="og:site_name" content="Lazyboy&#39;s blog"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Lazyboy&#39;s blog" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Lazyboy&#39;s blog</a></h1>
+  <h2><a href="/">让求知成为一种习惯</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">首页</a></li>
+    
+      <li><a href="/archives">存档</a></li>
+    
+      <li><a href="/about">关于</a></li>
+    
+       <li><a href="/atom.xml">RSS</a></li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2014-06-06T06:35:17.000Z"><a href="/2014/06/06/合并排序/">6月 6 2014</a></time>
+      
+      
+  
+    <h1 class="title">常用内部排序之合并排序</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>&#x5408;&#x5E76;&#x6392;&#x5E8F;&#x57FA;&#x4E8E;&#x4E24;&#x4E2A;&#x4E3B;&#x8981;&#x7684;&#x89C2;&#x70B9;</p>
+<ol>
+<li>&#x4E00;&#x4E2A;&#x5C0F;&#x5217;&#x8868;&#x6392;&#x5E8F;&#x7684;&#x82B1;&#x8D39;&#x8981;&#x5C11;&#x4E8E;&#x5927;&#x5217;&#x8868;</li>
+<li>&#x5904;&#x7406;&#x4E24;&#x4E2A;&#x6709;&#x5E8F;&#x8868;&#xFF0C;&#x8981;&#x6BD4;&#x76F4;&#x63A5;&#x5904;&#x7406;&#x4E00;&#x4E2A;&#x65E0;&#x5E8F;&#x8868;&#x82B1;&#x8D39;&#x66F4;&#x5C11;&#x7684;&#x6B65;&#x9AA4;&#x3002;<br><a id="more"></a><br>&#x6240;&#x4EE5;&#x7ED9;&#x5B9A;&#x542B;&#x6709;n&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x5F85;&#x6392;&#x5E8F;&#x8BB0;&#x5F55;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x5C06;&#x5176;&#x770B;&#x6210;&#x662F;n&#x4E2A;&#x53EA;&#x542B;&#x6709;&#x4E00;&#x4E2A;&#x5143;&#x7D20;&#x7684;&#x6709;&#x5E8F;&#x5B50;&#x8868;&#xFF0C;&#x7136;&#x540E;&#x4E24;&#x4E24;&#x5F52;&#x5E76;&#xFF0C;&#x76F4;&#x81F3;&#x6574;&#x4E2A;&#x5F85;&#x6392;&#x5E8F;&#x8BB0;&#x5F55;&#x6709;&#x5E8F;&#xFF0C;&#x5047;&#x5B9A;&#x6211;&#x4EEC;&#x6709;&#x4E24;&#x7EC4;&#x6570;&#xFF0C;&#x5206;&#x522B;&#x4E3A;&#x6570;&#x7EC4;A&#xFF0C;&#x548C;&#x6570;&#x7EC4;B&#xFF0C;&#x6211;&#x4EEC;&#x5206;&#x522B;&#x4ECE;&#x4E24;&#x4E2A;&#x6570;&#x7EC4;&#x7684;&#x8D77;&#x59CB;&#x4F4D;&#x7F6E;&#x626B;&#x63CF;&#xFF0C;&#x5E76;&#x4E14;&#x6BD4;&#x8F83;&#x4E24;&#x4E2A;&#x6570;&#x7EC4;&#x76F8;&#x5E94;&#x626B;&#x63CF;&#x4F4D;&#x7F6E;&#x7684;&#x503C;&#xFF0C;&#x8F83;&#x5C0F;&#x7684;&#x503C;&#xFF08;&#x5047;&#x8BBE;A&#x4E2D;&#x7684;&#x503C;&#x8F83;&#x5C0F;&#xFF09;&#x63D2;&#x5165;&#x6211;&#x4EEC;&#x7684;&#x7ED3;&#x679C;&#x6570;&#x7EC4;&#x4E2D;&#xFF08;&#x521D;&#x59CB;&#x7684;&#x65F6;&#x5019;&#x4E3A;&#x7A7A;&#xFF09;&#xFF0C;&#x5BF9;&#x5E94;&#x7684;&#x6307;&#x9488;&#x4E0B;&#x79FB;&#x4E00;&#x4F4D;&#x3002;&#x7136;&#x540E;&#x518D;&#x7528;&#x6570;&#x7EC4;A&#x4E2D;&#x7684;&#x7B2C;&#x4E8C;&#x4E2A;&#x503C;&#x4E0E;&#x6570;&#x7EC4;B&#x4E2D;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x503C;&#x6BD4;&#x8F83;&#xFF0C;&#x540C;&#x6837;&#x5C06;&#x8F83;&#x5C0F;&#x7684;&#x503C;&#x63D2;&#x5165;&#x81F3;&#x7ED3;&#x679C;&#x6570;&#x7EC4;&#x4E2D;&#xFF0C;&#x5E76;&#x79FB;&#x52A8;&#x76F8;&#x5E94;&#x6307;&#x9488;&#x5230;&#x4E0B;&#x4E00;&#x4F4D;&#x7F6E;&#x3002;&#x91CD;&#x590D;&#x4E0A;&#x8FF0;&#x6B65;&#x9AA4;&#x76F4;&#x5230;&#x67D0;&#x4E00;&#x6307;&#x9488;&#x5230;&#x8FBE;&#x5E8F;&#x5217;&#x672B;&#x5C3E;&#xFF0C;&#x518D;&#x5C06;&#x53E6;&#x4E00;&#x5E8F;&#x5217;&#x5269;&#x4E0B;&#x7684;&#x5143;&#x7D20;&#x76F4;&#x63A5;&#x590D;&#x5236;&#x5230;&#x524D;&#x8FB9;&#x5408;&#x5E76;&#x5E8F;&#x5217;&#x7684;&#x5C3E;&#x90E8;&#xFF0C;&#x6839;&#x636E;&#x4E0A;&#x8FF0;&#x8FC7;&#x7A0B;&#xFF0C;&#x4E0D;&#x96BE;&#x5199;&#x51FA;&#x5982;&#x4E0B;&#x5408;&#x5E76;&#x64CD;&#x4F5C;&#x4EE3;&#x7801;&#xFF1A;<figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">merge</span><span class="params">(left,right)</span>{</span>
+    <span class="keyword">var</span> result=[],
+    i=<span class="number">0</span>,
+    j=<span class="number">0</span>;   <span class="comment">//i,j&#x5206;&#x522B;&#x4E3A;left&#x548C;right&#x6570;&#x7EC4;&#x7684;&#x5DE5;&#x4F5C;&quot;&#x6307;&#x9488;&quot;</span>
+ 
+    <span class="keyword">while</span>(i&lt;left.length &amp;&amp; j&lt;right.length){
+        <span class="keyword">if</span>(left[i]&lt;right[j]){
+           result.push(left[i++]);
+        }<span class="keyword">else</span>{
+           result.push(right[j++]);
+        }
+    }
+    <span class="keyword">return</span> result.concat(left.slice(i)).concat(right.slice(j));
+}
+</pre></td></tr></table></figure><br>&#x5BF9;&#x4E8E;&#x4E00;&#x4E2A;&#x5217;&#x8868;&#xFF0C;&#x5F53;&#x5176;&#x957F;&#x5EA6;&#x4E3A;0&#x6216;&#x8005;&#x662F;1&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x5B83;&#x5DF2;&#x7ECF;&#x6709;&#x5E8F;&#x3002;&#x5426;&#x5219;&#x6211;&#x4EEC;&#x987B;&#x5C06;&#x672A;&#x6392;&#x5E8F;&#x7684;&#x90E8;&#x5206;&#x5E73;&#x5747;&#x5212;&#x5206;&#x4E3A;&#x4E24;&#x4E2A;&#x5B50;&#x5E8F;&#x5217;&#x3002;&#x6BCF;&#x4E2A;&#x5B50;&#x5E8F;&#x5217;&#xFF0C;&#x9012;&#x5F52;&#x7684;&#x5BF9;&#x5176;&#x4F7F;&#x7528;&#x5F52;&#x5E76;&#x6392;&#x5E8F;&#x3002;&#x5230;&#x6700;&#x540E;&#x518D;&#x5408;&#x5E76;&#x4E24;&#x4E2A;&#x5B50;&#x5217;&#x8868;&#xFF0C;&#x4F7F;&#x4E4B;&#x6574;&#x4F53;&#x6709;&#x5E8F;&#x3002;&#x4E8E;&#x662F;&#x6211;&#x4EEC;&#x4E0D;&#x96BE;&#x5F97;&#x51FA;&#x5982;&#x4E0B;&#x7684;&#x5F52;&#x5E76;&#x6392;&#x5E8F;&#x8FC7;&#x7A0B;&#xFF1A;<br><figure class="highlight"><table><tr><td class="gutter"><pre>1
+2
+3
+4
+5
+6
+7
+8
+9
+</pre></td><td class="code"><pre><span class="function"><span class="keyword">function</span> <span class="title">mergesort</span><span class="params">(arr)</span>{</span>
+    <span class="keyword">if</span>(<span class="transposed_variable">arr.</span><span class="built_in">length</span>&lt;<span class="number">2</span>)
+        <span class="keyword">return</span> arr;
+    var middle=<span class="transposed_variable">Math.</span><span class="built_in">floor</span>(<span class="transposed_variable">arr.</span><span class="built_in">length</span>/<span class="number">2</span>);
+    left=<span class="transposed_variable">arr.</span>slice(<span class="number">0</span>,middle);
+    right=<span class="transposed_variable">arr.</span>slice(middle);
+    
+    <span class="keyword">return</span> merge(mergesort(left),mergesort(right));
+}
+</pre></td></tr></table></figure>
+</li>
+</ol>
+
+      
+    </div>
+    <footer>
+      
+        
+  
+  <div class="categories">
+    <a href="/categories/常用内部排序/">常用内部排序</a>
+  </div>
+
+        
+  
+  <div class="tags">
+    <a href="/tags/合并排序/">合并排序</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+    <div class="bdsharebuttonbox"><a href="#" class="bds_more" data-cmd="more">分享到：</a><a title="分享到QQ空间" href="#" class="bds_qzone" data-cmd="qzone">QQ空间</a><a title="分享到新浪微博" href="#" class="bds_tsina" data-cmd="tsina">新浪微博</a><a title="分享到腾讯微博" href="#" class="bds_tqq" data-cmd="tqq">腾讯微博</a><a title="分享到人人网" href="#" class="bds_renren" data-cmd="renren">人人网</a><a title="分享到微信" href="#" class="bds_weixin" data-cmd="weixin">微信</a></div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"16"},"share":{"bdSize":16},"image":{"viewList":["qzone","tsina","tqq","renren","weixin"],"viewText":"分享到：","viewSize":"16"},"selectShare":{"bdContainerClass":null,"bdSelectMiniList":["qzone","tsina","tqq","renren","weixin"]}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+  </div>
+</article>
+
+
+<section id="comment">
+<!-- Duoshuo Comment BEGIN -->
+	<div class="ds-thread"></div>
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"yanhoulei"};
+	(function() {
+		var ds = document.createElement('script');
+		ds.type = 'text/javascript';ds.async = true;
+		ds.src = 'http://static.duoshuo.com/embed.js';
+		ds.charset = 'UTF-8';
+		(document.getElementsByTagName('head')[0] 
+		|| document.getElementsByTagName('body')[0]).appendChild(ds);
+	})();
+	</script>
+<!-- Duoshuo Comment END -->
+
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="搜索">
+    <input type="hidden" name="q" value="site:zipperary.com">
+  </form>
+</div>
+
+  
+<div class="widget tag">
+  <h3 class="title">分类</h3>
+  <ul class="entry">
+  
+    <li><a href="/categories/javaSE/">javaSE</a><small>1</small></li>
+  
+    <li><a href="/categories/常用内部排序/">常用内部排序</a><small>1</small></li>
+  
+  </ul>
+</div>
+
+
+  
+<div class="widget tagcloud">
+  <h3 class="title">标签云</h3>
+  <div class="entry">
+    <a href="/tags/object对象/" style="font-size: NaNpx;">object对象</a><a href="/tags/合并排序/" style="font-size: NaNpx;">合并排序</a>
+  </div>
+</div>
+
+
+  <div class="widget tag">
+<h3 class="title">友情链接</h3>
+<ul class="entry">
+<li><a href="http://zipperary.com/" title="Zippera's Blog">Zippera</a></li>
+<li><a href="http://panpei.net.cn/" title="crAzyliOn's blog">陪哥的Blog</a></li>
+<li><a href="http://xuxiaolong.net.cn/"> littlebean的Blog</a></li>
+</ul>
+</div>
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2014 yanHL
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
